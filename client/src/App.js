@@ -28,7 +28,8 @@ class App extends Component {
     componentDidMount(){
 
         //websocket event handlers
-        const socket = new WebSocket('ws://localhost:3005/');
+        var HOST = location.origin.replace(/^http/, 'ws')
+        const socket = new WebSocket(HOST);
         socket.onopen = (e)=>{
             console.log('connected to: ' + e.currentTarget.url);
             this.setState({connected: true})
