@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "express": "^4.15.0",
+    "express-ws": "^3.0.0",
     "ws": "^2.2.0"
   }
 }

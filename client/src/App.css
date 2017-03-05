@@ -1,15 +1,11 @@
 #search-container {
     margin: 0 auto;
-    width: 400px;
+    width: 80%
 }
 
 .viewing-container {
     width: 80%;
     margin: 10px auto;
-
-    -webkit-column-count: 3; /* Chrome, Safari, Opera */
-    -moz-column-count: 3; /* Firefox */
-    column-count: 3;
 }
 .viewing-box {
     display: inline-block;
@@ -25,4 +21,13 @@
     border-radius: 20px;
     background-color: white;
     box-shadow: 0 6px 12px rgba(0,0,0,.6);
+}
+
+@media only screen
+and (min-device-width: 620px) {
+    .viewing-container {
+        -webkit-column-count: 3; /* Chrome, Safari, Opera */
+        -moz-column-count: 3; /* Firefox */
+        column-count: 3;
+    }
 }

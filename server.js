@@ -1,16 +1,25 @@
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 3001
-var wsPort = process.env.PORT || 3005
 
 var path = require('path')
 app.use(express.static(path.join(__dirname, 'client/build')))
+var expressWs = require('express-ws')(app)
 
 let stocks = []
 
 
-
-
+app.ws('/a', function(ws, req){
+        ws.send(JSON.stringify(stocks));
+        ws.on('message', function incoming(message) {
+            console.log(ws.clients)
+            stocks.push(JSON.parse(message))
+            //ws.send(JSON.stringify(stocks))
+            expressWs.getWss('/a').clients.forEach(function(client){
+                client.send(JSON.stringify(stocks))
+            })
+        });
+})
 
 app.get('/api/removeSymbol/:index', function(req, res){
     stocks.splice(req.params.index, 1)
@@ -22,16 +31,3 @@ app.get('*', function(req, res){
 app.listen(3001, function(){
     console.log('express server listening on port' + port)
 })
-
-
-
-const WebSocket = require('ws');
-const ws = new WebSocket.Server({port: wsPort});
-
-ws.on('connection', function connection(ws) {
-    ws.send(JSON.stringify(stocks));
-    ws.on('message', function incoming(message) {
-        stocks.push(JSON.parse(message))
-        ws.send(JSON.stringify(stocks))
-    });
-});

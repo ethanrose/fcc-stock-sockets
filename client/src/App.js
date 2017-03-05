@@ -28,13 +28,14 @@ class App extends Component {
     componentDidMount(){
 
         //websocket event handlers
-        var HOST = location.origin.replace(/^http/, 'ws')
+        var HOST = location.origin.replace(/^http/, 'ws') + '/a'
         const socket = new WebSocket(HOST);
         socket.onopen = (e)=>{
             console.log('connected to: ' + e.currentTarget.url);
             this.setState({connected: true})
         }
         socket.onerror = (e)=>{
+            console.log(e)
             this.setState({connected: false})
         }
         socket.onclose = (e)=> {
@@ -92,9 +93,6 @@ class App extends Component {
 
         //chart configuration
         var config = {
-            rangeSelector: {
-                selected: 1
-            },
             title: {
                 text: 'Stock Prices'
             },
@@ -131,7 +129,7 @@ class App extends Component {
                 {/*CHART*/}
                 <div className="container">
                     <div className="chart-card">
-                        {this.state.viewing.length &&
+                        {this.state.viewing &&
                         <ReactHighstock config={config} />
                         }
                     </div>
@@ -141,23 +139,25 @@ class App extends Component {
 
 
                 {/*SEARCH BOX*/}
-                <div id="search-container">
-                    <form id="queryForm">
-                        <div className="form-group" id="searchBoxFormGroup">
-                            <div className="input-group">
-                                <span className="input-group-addon">Symbol</span>
-                                <input type="text" className="form-control" onChange={(e)=>this.handleQueryChange(e)} value={this.state.query} />
-                                <span className="input-group-btn">
-                                    <button className="btn btn-info" type="submit">Search</button>
-                                </span>
+                <div className="container">
+                    <div id="search-container">
+                        <form id="queryForm">
+                            <div className="form-group" id="searchBoxFormGroup">
+                                <label className="control-label">Symbol</label>
+                                <div className="input-group">
+                                    <input type="text" className="form-control" onChange={(e)=>this.handleQueryChange(e)} value={this.state.query} />
+                                    <span className="input-group-btn">
+                                        <button className="btn btn-info" type="submit">Search</button>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
 
                 {/*LIVE STOCKS IN THE VIEW*/}
                 <div className="viewing-container">
-                {this.state.viewing.length && this.state.viewing.map((symbol, i)=> {
+                {this.state.viewing && this.state.viewing.map((symbol, i)=> {
                     return (
                         <div className="viewing-box" key={i}>
                             <button type="button" value={i} className="close close-button" onClick={(e)=>this.handleClose(e)}>&times;</button>
