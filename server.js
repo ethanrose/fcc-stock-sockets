@@ -14,7 +14,6 @@ app.ws('/a', function(ws, req){
         ws.on('message', function incoming(message) {
             console.log(ws.clients)
             stocks.push(JSON.parse(message))
-            //ws.send(JSON.stringify(stocks))
             expressWs.getWss('/a').clients.forEach(function(client){
                 client.send(JSON.stringify(stocks))
             })
@@ -28,6 +27,6 @@ app.get('/api/removeSymbol/:index', function(req, res){
 app.get('*', function(req, res){
     res.sendFile('/client/build/index.html')
 })
-app.listen(3001, function(){
+app.listen(port, function(){
     console.log('express server listening on port' + port)
 })
