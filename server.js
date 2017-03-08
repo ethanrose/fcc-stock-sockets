@@ -12,7 +12,6 @@ let stocks = []
 app.ws('/a', function(ws, req){
         ws.send(JSON.stringify(stocks));
         ws.on('message', function incoming(message) {
-            console.log(ws.clients)
             stocks.push(JSON.parse(message))
             expressWs.getWss('/a').clients.forEach(function(client){
                 client.send(JSON.stringify(stocks))
@@ -22,7 +21,10 @@ app.ws('/a', function(ws, req){
 
 app.get('/api/removeSymbol/:index', function(req, res){
     stocks.splice(req.params.index, 1)
-    res.send('Successfully Removed!')
+    expressWs.getWss('/a').clients.forEach(function(client){
+        client.send(JSON.stringify(stocks))
+    })
+    res.end();
 })
 app.get('*', function(req, res){
     res.sendFile('/client/build/index.html')

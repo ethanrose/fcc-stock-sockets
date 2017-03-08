@@ -80,13 +80,7 @@ class App extends Component {
     }
 
     handleClose(e){
-        console.log('closing ' + e.target.value)
-        let viewing = this.state.viewing;
-        viewing.splice(e.target.value, 1)
-        this.setState({viewing: viewing})
-        $.get('/api/removeSymbol/' + e.target.value, (res)=>{
-            console.log(res)
-        })
+        $.get('/api/removeSymbol/' + e.target.value)
     }
 
     render() {
